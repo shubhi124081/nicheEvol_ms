@@ -3,7 +3,6 @@
 .RHistory
 .Rproj.user
 .Rproj
-*.pdf
 man/
 .Rd
 data/
