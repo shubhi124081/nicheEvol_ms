@@ -32,6 +32,26 @@ We provide all the scripts and functions required to replicate our analyses in t
 - .lintR
 - .gitignore 
 
+**Note**: there is no data stored in this repository. To access the data visit (https://zenodo.org/records/11497929)
+
+The data for simulations is stored in `data` directory with all simulated trees stored in the `data/trees` sub-directory 
+
+The data for real-world analysis will need to be stored in `raw_data` directory with trees stored in the `raw_data/trees` sub-directory
+
+All results will be written to and read from `res` directory
+
+The `scripts` directory stores all functions and scripts to fit the models and do the analysis. Below is a description of all the contents of the `scripts` directory. Overall, the numbered files run the model fitting and analysis. The non-numbered files are used for generating figures and appendicies. 
+
+`00-functions.R` has all of the functions that need to be read in to support model fitting, analysis and plotting 
+
+`01-gen_tree.R` is a script for generating a phylogeny for use in simulations. **Note**: If replicating analysis in the manuscript, skip this script. The simulated phylogeny is uploaded to the Zenodo repository
+
+`02-gen_data.R` script for generating simulated data. For a brief overview of this script take a look at 
+
+
+
 # Installation 
+
+
 
 # Reproduce figures and results  
