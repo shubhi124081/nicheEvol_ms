@@ -179,7 +179,7 @@ dict$str <- c(
 df$str <- dict[match(df$file, dict$id), "str"]
 
 df3 <- df[-c(which(grepl("BM_1.5_0", df$file))), ]
-df3 <- df3[sample(1:nrow(df3)), ]
+df3 <- df3[sample(seq_len(nrow((df3)))), ]
 ggplot(df3) +
   geom_point(aes(x = est, y = beta_true, color = str), size = 2) +
   geom_abline(slope = 1, linetype = "dashed") +
