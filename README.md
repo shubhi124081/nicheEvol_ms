@@ -29,8 +29,9 @@ We provide all the scripts and functions required to replicate our analyses in t
         - niche_space.R 
         - params_fig.R 
         - posterior_analysis.R 
-- .lintR
+- .lintr
 - .gitignore 
+- README.md
 
 **Note**: there is no data stored in this repository. To access the data visit (https://zenodo.org/records/11497929)
 
@@ -46,9 +47,21 @@ The `scripts` directory stores all functions and scripts to fit the models and d
 
 `01-gen_tree.R` is a script for generating a phylogeny for use in simulations. **Note**: If replicating analysis in the manuscript, skip this script. The simulated phylogeny is uploaded to the Zenodo repository
 
-`02-gen_data.R` script for generating simulated data. For a brief overview of this script take a look at 
+`02-gen_data.R` script for generating simulated data. For a brief overview of this script take a look at `Appendix_2.Rmd` which is a vigenette going through the simulation framework 
 
+`03-stan_model.R` script with stan model written down 
 
+`04-run_file.R` reads in data and stan models and runs files. Writes out results to `res` directory. **Note**: All models were run on the High Performance Cluster with 8 CPUs. These models may be too heavy to run on a personal machine. Therefore, all the result files have also been made available in the Zenodo repository. 
+
+`05-analysis.R` empty 
+
+`Appendix_2.Rmd` vigenette going through simulation framework 
+
+`niche_space.R` Figure 4 part 1 
+
+`params_fig.R` Figure 2
+
+`posterior_analysis.R` Figure 3, Figure 4 part 2 
 
 # Installation 
 
