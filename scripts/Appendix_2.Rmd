@@ -1,0 +1,221 @@
+---
+title: "Simulation Framework"
+output: pdf_document
+date: "May 2024"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction 
+
+Here we describe the simulation framework used to test and analyse our modeling framework. We utilize functions from library `ape` and `phytools` to complete this simulation. 
+
+The simulation framework begins with generating a phylogenetic tree. We provide code below. Here, we call the phylogenetic tree used for our simulation experiments. 
+
+### 1. Simulate phylogeny
+
+```{r echo = FALSE}
+rm(list = ls())
+
+# Some libs
+library(ape)
+library(phytools)
+
+# Root directory
+root <- "~/nicheEvol_ms"
+
+# Source required functions
+source(file.path(root, "scripts/00-functions.R"))
+
+# Filepaths
+data_directory <- file.path(root, "data")
+raw_directory <- file.path(root, "raw_data")
+
+# Config params
+SIM <- TRUE
+TREE_NAME <- "standard_sim"
+TREE_TIME <- 10
+MEAN_ROOT_VECTOR <- as.numeric(c(0, 0))
+COVAR_TRAITS <- matrix(c(0.5, 1, 1, 2.5), nrow = 2, ncol = 2)
+NTRAITS <- 2
+SIGMA2 <- 1
+ALPHA <- 1
+USER_GRID <- FALSE
+USER_PATH <- NULL
+NSAMPLES <- 100
+BINARY <- TRUE
+EPATH <- "~/env"
+```
+
+```{r tree}
+tree_time <- 8
+tr <- ape::rbdtree(0.1, 0, Tmax = tree_time)
+tr$edge.length <- tr$edge.length / max(phytools::nodeHeights(tr)[ ,2]) * 1
+```
+
+```{r pressure, echo=FALSE}
+ # Load in object tree
+contents <- load(file.path(root, "data/trees", paste0(TREE_NAME, ".Rdata")))
+plot(tree)
+```
+
+### 2. Set up a spatial grid 
+
+The spatial grid is set up systematically to sample points from the rasters below. 
+
+```{r}
+GRID <- createGrid(
+  USER_GRID,
+  nsamples = 100, USER_PATH,
+  xmin = -10, xmax = 10,
+  ymin = -10, ymax = 10
+	)
+
+env <- wrangleEnv(epath1 = "~/env", grid1 = GRID)
+env_files <- file.path("~/env", c("CHELSA_bio_1.tif", "CHELSA_bio_13.tif"))
+ras <- terra::rast(env_files)
+extent = c(-81, -60, -40, 0)
+ras <- terra::crop(ras, terra::ext(extent))
+terra::plot(ras)
+```
+
+
+### 3. Simulate species-environment coefficients using an evolutionary process 
+
+For a specific set of parameters and a given tree, the species-environment coefficients (niche parameters) are estimated using either the Ornstein-Uhlenbeck (OU) Process or the Brownian Motion (BM) Process. 
+
+```{r, run = FALSE}
+TREE <- tree
+NTRAITS <- 2
+SIGMA2 <- 1
+ALPHA <- 1 
+    if (ALPHA == 0) {
+        bb <- phytools::fastBM(TREE, sig2 = SIGMA2, a0 = 1, nsim = NTRAITS)
+    } else {
+        bb <- phytools::fastBM(TREE,
+            alpha = ALPHA, theta = 1,
+            sigma2 = SIGMA2, nsim = NTRAITS
+        )
+    }
+    colnames(bb) <- paste0("trait-", seq_len(ncol(bb)))
+
+```
+
+### 4. Simulate species' abundance or presence/absence 
+
+Using the environmental variable, the spatial grid and the niche parameters, we can now simulate a species' abundance or presence/absence. We then split the species' data into train and test sets (where 70% of the data is training data and 30% is held-out for validation). Here, we show an example dataset for presence-absence data. 
+
+```{r}
+    # Simulates an OU/BM process
+    all_data <- simulateAbundanceData_new(
+        grid = GRID,
+        nsamples = NSAMPLES,
+        binary = BINARY,
+        print = TRUE,
+        tree,
+        vars = c("CHELSA_bio_1.tif", "CHELSA_bio_13.tif"),
+        ntraits = NTRAITS,
+        sigma2 = SIGMA2,
+        alpha = ALPHA,
+        epath = EPATH
+    )
+```
+
+```{r, echo = FALSE}
+    Ytrue <- all_data$Ytrue
+    Ytrue <- Ytrue[, -c(which(colnames(Ytrue) == "rwid"))]
+    X <- all_data$X
+    X <- X[, -c(which(colnames(X) == "rwid"))]
+
+    # Subsetting matrices into test and train
+    Ytrain <- all_data$Ytrain
+    Ytrain <- Ytrain[, -c(which(colnames(Ytrain) %in% c("rwid", "tot")))]
+    Y_occ <- Ytrain
+    Y_occ[Y_occ < 0] <- 0
+    Xtrain <- all_data$Xtrain
+    Xtrain <- Xtrain[, -c(which(colnames(Xtrain) == "rwid"))]
+    true_betas <- all_data$true_betas
+    train_index <- all_data$train_index
+    true_tree <- tree
+
+    # Making matrices for stan code
+    ns <- ncol(Ytrain)
+    nsamples_train <- nrow(Ytrain)
+    L <- matrix(ape::vcv(tree, corr = TRUE), ns, ns)
+    distance_matrix <- ape::cophenetic.phylo(tree)
+    I <- matrix(0, ns, ns)
+    diag(I) <- 1
+
+    I_y <- matrix(0, nsamples_train, nsamples_train)
+    diag(I_y) <- 1
+
+    standata <- list(
+        N = nsamples_train,
+        K = ncol(Xtrain),
+        J = ns,
+        E = 1,
+        N_occ = nsamples_train,
+        y = as.matrix(Ytrain),
+        y_occ = as.matrix(Y_occ),
+        x = Xtrain,
+        x_occ = Xtrain,
+        x_tilde = Xtrain,
+        N_tilde = nrow(Xtrain),
+        L_dist = distance_matrix,
+        L_corr = L,
+        beta_mu = rep(0, ncol(Ytrain)),
+        true_betas = true_betas,
+        I = I,
+        Iy = I_y,
+        alpha = 1,
+        st_devs = rep(1, ncol(Ytrain)),
+        U = 6,
+        a = 3,
+        b = 0.5,
+        tr = tree,
+        Y_true = Ytrue,
+        X_true = X,
+        train_index = train_index,
+        rho_mean = 2.5,
+        rho_sd = 0.2,
+        alpha_mean = 0,
+        alpha_sd = 0.2
+    )
+
+    # filename to write out
+    filename <- paste0("example", ".Rdata")
+
+    # Adding config params to the data file
+    config <- list()
+    config$sim <- SIM
+    config$tree_name <- TREE_NAME
+    config$tree_time <- TREE_TIME
+    config$mean_root_vector <- MEAN_ROOT_VECTOR
+    config$covar_traits <- COVAR_TRAITS
+    config$ntraits <- NTRAITS
+    config$sigma2 <- SIGMA2
+    config$alpha <- ALPHA
+    config$user_grid <- USER_GRID
+    config$user_path <- USER_PATH
+    config$nsamples <- NSAMPLES
+    config$binary <- BINARY
+    config$epath <- EPATH
+
+    everything <- list(
+        data = standata,
+        config = config
+    )
+
+    # Save
+    save(everything, file = paste0(
+        data_directory, "/",
+        filename
+    ))
+    
+head(Ytrain)
+```
+
+
+This code and all required functions are available at the associated GitHub Repository. 

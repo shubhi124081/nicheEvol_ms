@@ -1,5 +1,14 @@
 # Required functions
 
+fixTree <- function(tree_time) {
+    tr <- ape::rbdtree(0.1, 0, Tmax = tree_time)
+    tr$edge.length <- tr$edge.length / max(phytools::nodeHeights(tr)[
+        ,
+        2
+    ]) * 1
+    return(tr)
+}
+
 checkTree <- function(TREE1 = tree, ATLEASTN, NOT_MORE_THAN, TREE_TIME) {
     if (!is.null(ATLEASTN) && is.null(NOT_MORE_THAN)) {
         startTime <- Sys.time()
@@ -339,4 +348,23 @@ printDetails <- function(..., digits = getOption("digits"), width = getOption("w
     )
     s <- do.call(paste, c(l, list(sep = "\n\n")))
     writeLines(strwrap(s))
+}
+
+getExtentDf <- function(DF, NAMES) {
+    DF2 <- DF[, NAMES]
+    if (all(c("lat", "lon") %in% NAMES)) {
+        xmin <- min(DF2[, "lon"])
+        xmax <- max(DF2[, "lon"])
+        ymin <- min(DF2[, "lat"])
+        ymax <- max(DF2[, "lat"])
+    }
+    if (all(c("x", "y") %in% NAMES)) {
+        xmin <- min(DF2[, "x"])
+        xmax <- max(DF2[, "x"])
+        ymin <- min(DF2[, "y"])
+        ymax <- max(DF2[, "y"])
+    }
+    ext <- c(xmin, xmax, ymin, ymax)
+    names(ext) <- c("xmin", "xmax", "ymin", "ymax")
+    return(ext)
 }
