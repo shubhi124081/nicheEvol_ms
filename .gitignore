@@ -10,11 +10,11 @@ data/
 raw_data/
 .csv
 res/
-.pdf
 analysis/
 trees/
 domains/
 expert_ranges/
 .xlsx
 jobs/
-figures/
+raw_data/.pdf 
+data/.pdf 
