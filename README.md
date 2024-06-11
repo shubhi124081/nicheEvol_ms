@@ -65,6 +65,4 @@ The `scripts` directory stores all functions and scripts to fit the models and d
 
 # Installation 
 
-
-
-# Reproduce figures and results  
+This analysis is pretty lightweight in terms of package dependecies as most functions required are written in base R (see `00-functions.R`). We do require installation of a few packages packages - `rstan`, `ape`, `phytools`, `terra`, `MASS`, `grDevices` and `ggplot2`
