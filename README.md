@@ -1,5 +1,5 @@
 # nicheEvol_ms
-Code from a manuscript titled "Measuring the evolution of n-dimensional environmental niches", currently in review at Ecography
+Code from a manuscript titled "Measuring the evolution of n-dimensional environmental niches", published in Ecography -  DOI: 10.5281/zenodo.13976337
 
 # Introduction 
 
