@@ -9,12 +9,13 @@ stretchPal <- function(user_cols, num_cols, interpolation = "linear") {
   return(hex)
 }
 
+# NOTE: Code for generating the summary file for this experiment is at the end
+# of this script
+
 # FIGURE 3A --------
 # File directory
 root <- "~/Downloads/new_nicheEvolMs" # Change to your directory
 filename <- "fig3a_betaEst_summary.csv"
-# NOTE: Code for generating the summary file for this experiment is at the end
-# of this script
 # Read the summary file for Figure 3A
 df <- read.csv(file.path(root, filename))
 
