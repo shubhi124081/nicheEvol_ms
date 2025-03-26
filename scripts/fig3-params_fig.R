@@ -14,7 +14,7 @@ stretchPal <- function(user_cols, num_cols, interpolation = "linear") {
 
 # FIGURE 3A --------
 # File directory
-root <- "~/Downloads/new_nicheEvolMs" # Change to your directory
+root <- "your_file_path" # Change to your directory
 filename <- "fig3a_betaEst_summary.csv"
 # Read the summary file for Figure 3A
 df <- read.csv(file.path(root, filename))
