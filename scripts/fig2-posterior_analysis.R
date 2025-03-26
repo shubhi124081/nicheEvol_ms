@@ -1,6 +1,8 @@
 library(ggplot2)
 
 root <- "your_file_path_here"
+source(file.path(root, "scripts", "00-functions.R"))
+
 exp <- "rafiki2_fig2_OU_as_0e21_1"
 BM <- FALSE # The model is Brownian for sub figure 1 ONLY
 # NOTE: Commented below are the experiment names and the y axes limits used in
@@ -44,9 +46,3 @@ ggplot(
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank()
   )
-
-
-
-# # cov_fixed[i] <- (alpha_fixed^2 * exp(-(dist[i])))
-# contents <- load("/Users/ss4224/phylo-sdms/phyloproj/res/grumpy_Opisthoprora_e2021/grumpy_Opisthoprora_e2021_rep1_multiprobit2_effort.Rdata")
-# contents <- load("/Users/ss4224/phylo-sdms/phyloproj/res/grumpy_Coeligena_e2021/grumpy_Coeligena_e2021_rep1_multiprobit2_effort.Rdata")

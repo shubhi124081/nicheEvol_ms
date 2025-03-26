@@ -1,6 +1,6 @@
 library(ggplot2)
-
 root <- "~/nicheEvol_ms"
+source(file.path(root, "scripts", "00-functions.R"))
 exp <- "nicheEvol_Coeligena_newprior5"
 # Two empirical experiments
 # 4 (C) "nicheEvol_Coeligena_newprior5"
