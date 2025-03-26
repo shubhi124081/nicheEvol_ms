@@ -1,5 +1,5 @@
 # nicheEvol_ms
-Code from a manuscript titled "Measuring the evolution of n-dimensional environmental niches", currently in review at Ecography
+Code from a manuscript titled "Measuring the evolution of n-dimensional environmental niches", published in Ecography -  DOI: 10.5281/zenodo.13976337
 
 # Introduction 
 
@@ -24,7 +24,6 @@ We provide all the scripts and functions required to replicate our analyses in t
         - 02-gen_data.R 
         - 03-stan_model.R 
         - 04-run_file.R
-        - 05-analysis.R 
         - Appendix_2.Rmd
         - niche_space.R 
         - params_fig.R 
@@ -52,8 +51,6 @@ The `scripts` directory stores all functions and scripts to fit the models and d
 `03-stan_model.R` script with stan model written down 
 
 `04-run_file.R` reads in data and stan models and runs files. Writes out results to `res` directory. **Note**: All models were run on the High Performance Cluster with 8 CPUs. These models may be too heavy to run on a personal machine. Therefore, all the result files have also been made available in the Zenodo repository. 
-
-`05-analysis.R` empty 
 
 `Appendix_2.Rmd` vigenette going through simulation framework 
 
