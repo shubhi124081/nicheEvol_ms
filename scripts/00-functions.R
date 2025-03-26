@@ -330,7 +330,9 @@ makeXmat <- function(env1) {
     return(xmat)
 }
 
-printDetails <- function(..., digits = getOption("digits"), width = getOption("width")) {
+printDetails <- function(
+    ..., digits = getOption("digits"),
+    width = getOption("width")) {
     op <- options(digits = digits, width = width)
     on.exit(options(op))
     call <- match.call()
@@ -367,4 +369,34 @@ getExtentDf <- function(DF, NAMES) {
     ext <- c(xmin, xmax, ymin, ymax)
     names(ext) <- c("xmin", "xmax", "ymin", "ymax")
     return(ext)
+}
+
+# Calculate covariance between fit GP parameters
+calculate_covariance <- function(fit, everything, dist) {
+    rho <- mean(fit[, "rho"])
+    alpha <- mean(fit[, "alpha"])
+
+    rho_05 <- quantile(fit[, "rho"], 0.05)
+    rho_95 <- quantile(fit[, "rho"], 0.95)
+
+    alpha_05 <- quantile(fit[, "alpha"], 0.05)
+    alpha_95 <- quantile(fit[, "alpha"], 0.95)
+
+    cov_95 <- sapply(dist, function(d) alpha_95^2 * exp(-0.5 * d / rho_95^2))
+    cov_05 <- sapply(dist, function(d) alpha_05^2 * exp(-0.5 * d / rho_05^2))
+    cov_50 <- sapply(dist, function(d) alpha^2 * exp(-0.5 * d / rho^2))
+
+    alpha_fixed <- everything$config$phylo$sigma2$value
+    rho_fixed <- everything$config$phylo$alpha$value
+    cov_fixed <- sapply(dist, function(d) alpha_fixed^2 * exp(-rho_fixed * d))
+
+    cov_df <- data.frame(
+        "cov_fixed" = cov_fixed,
+        "cov_50" = cov_50,
+        "cov_05" = cov_05,
+        "cov_95" = cov_95,
+        "dist" = dist
+    )
+
+    return(cov_df)
 }
