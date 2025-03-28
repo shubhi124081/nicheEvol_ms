@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Measuring the Evolution of n-Dimensional Environmental Niches
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15090785.svg)](https://doi.org/10.5281/zenodo.15090785)
