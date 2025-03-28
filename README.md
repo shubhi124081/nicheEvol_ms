@@ -16,7 +16,7 @@ Published in **Ecography (2024)**
 
 ---
 
-## 📄 Citation
+## Citation
 
 If you use this code or build upon this work, please cite:
 
@@ -67,7 +67,7 @@ renv::restore()
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```text
 nicheEvol_ms/
