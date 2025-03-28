@@ -1,7 +1,7 @@
 # Set up---
 library(ggplot2)
-DPATH <- "~/phylo-sdms/phyloproj/raw_data/hummingbirdSA"
-NAME <- "hummingbird_sa"
+DPATH <- "your_file_path_here"
+NAME <- "hummingbird_raw"
 
 # Load data
 X <- read.csv(file = paste0(DPATH, "/x_raw.csv"))
