@@ -57,11 +57,6 @@ You will need the following R packages:
 install.packages(c("rstan", "ape", "phytools", "terra", "MASS", "grDevices", "ggplot2"))
 ```
 
-We also recommend using [`renv`](https://rstudio.github.io/renv/) for reproducible environments. If available:
-```r
-renv::restore()
-```
-
 ---
 
 ## Repository Structure
@@ -100,7 +95,7 @@ cd nicheEvol_ms
 
 ### 2. Install R dependencies
 
-As noted above, either manually install required packages or use `renv`.
+As noted above
 
 ### 3. Run simulations
 
