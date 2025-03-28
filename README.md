@@ -4,7 +4,6 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15090785.svg)](https://doi.org/10.5281/zenodo.15090785)
 [![Published in Ecography](https://img.shields.io/badge/Published%20In-Ecography-4b8bbe)](https://doi.org/10.1111/ecog.07285)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub Repo stars](https://img.shields.io/github/stars/shubhi124081/nicheEvol_ms?style=social)](https://github.com/shubhi124081/nicheEvol_ms/stargazers)
 [![Last Commit](https://img.shields.io/github/last-commit/shubhi124081/nicheEvol_ms)](https://github.com/shubhi124081/nicheEvol_ms/commits/main)
 
 _This repository accompanies the manuscript:_  
