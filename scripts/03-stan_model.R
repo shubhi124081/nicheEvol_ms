@@ -134,3 +134,82 @@ model
 
 }
 "
+
+GPtrun2_mod_newprior <- "
+data
+{
+  int<lower=1> N; // Number of observations
+  int<lower=1> J; // Number of dependent variables i.e. number of regression lines
+  int<lower=0> K; // Number of independent variables
+  matrix[N,K] x;  // Matrix containing data on independent variable
+  matrix[N,J] y;  // Matrix containing data on dependent variable
+  //matrix[N,K] x_tilde; //new x data
+  //int<lower=1> N_tilde;  // number of new xs
+  matrix[J,J] L_dist; // distance matrix
+  vector[J] beta_mu;  //beta centers
+  matrix[J,J] I; // for the correlation matrix for Y
+  // vector[J] st_devs;    // for variance of betas
+  int<lower=1> U; // upper limit for truncated inverse gamma
+  real<lower=0> a; // inverse gamma hyper parameter
+  real<lower=0> b; // inverse gamma hyper parameter
+  real rho_mean; // rho mean for prior
+  real alpha_mean; //rho sd for prior
+  real<lower=0> rho_sd; // rho sd for prior
+  real<lower=0> alpha_sd; // alpha sd for prior
+}
+
+parameters
+{
+  matrix[K,J] beta;
+  vector<lower=0>[J] st_devs;
+  vector<lower = 0>[J] y_devs;
+  real<lower = 0> rho;
+  real<lower = 0> alpha;
+  //real<lower = 0> sigma;
+
+}
+
+model
+{
+  matrix[N,J] xbeta = x * beta;
+  matrix[J, J] L_K;
+  matrix[J, J] cov;
+  matrix[J, J] L_cov;
+
+  for (i in 1:(J-1)) {
+
+    L_K[i,i]  = alpha^2 + 0.0001; // for numerical stability
+    for(j in (i + 1):J){
+      L_K[i,j] = alpha^2 * exp(-0.5 * (L_dist[i, j])/rho);
+      L_K[j,i] = L_K[i,j];
+
+    }
+  }
+
+  for( n in 1:J)
+    L_K[n, n] = alpha^2 + 0.0001;
+
+  cov = L_K + diag_pre_multiply(st_devs, I);
+  L_cov = cholesky_decompose(cov);
+
+  rho ~ lognormal(rho_mean, rho_sd);
+  // rho ~ uniform(0, 50);
+  alpha ~ lognormal(alpha_mean, alpha_sd);
+  st_devs ~ cauchy(0, 2.5);
+
+
+  for(k in 1:K)
+    beta[K] ~ multi_normal_cholesky(rep_vector(0, J) , L_cov);
+
+
+  y_devs ~ cauchy(0, 2.5);
+
+  for (i in 1:N)
+    y[i] ~ multi_normal_cholesky(xbeta[i],diag_pre_multiply(y_devs, I));
+}
+
+generated quantities {
+vector[N] log_lik;
+for (n in 1:N) log_lik[n] = multi_normal_lpdf(y[n] | x[n] * beta, diag_pre_multiply(y_devs, I));
+}
+"

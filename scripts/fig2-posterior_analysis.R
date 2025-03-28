@@ -1,7 +1,10 @@
 library(ggplot2)
 
 root <- "your_file_path_here"
-source(file.path(root, "scripts", "00-functions.R"))
+scripts_directory <- "your_file_path_here"
+results_directory <- "your_file_path_here"
+data_directory <- "your_file_path_here"
+source(file.path(scripts_directory, "00-functions.R"))
 
 exp <- "rafiki2_fig2_OU_as_0e21_1"
 BM <- FALSE # The model is Brownian for sub figure 1 ONLY
@@ -13,10 +16,10 @@ BM <- FALSE # The model is Brownian for sub figure 1 ONLY
 # Sub figure 3: "rafiki2_fig2_OU_siga_1_2", ylim = c(0, 2)
 # Sub figure 4: "rafiki2_fig2_OU_as_0e21_1", ylim = c(0, 0.1)
 
-res_files <- dir(file.path(root, "res/fig2", exp))
-contents <- load(file.path(root, "res/fig2", exp, res_files[1]))
-data_files <- dir(file.path(root, "data", exp))
-contents <- load(file.path(root, "data", exp, data_files[1]))
+res_files <- dir(file.path(results_directory, "fig2", exp))
+contents <- load(file.path(results_directory, "res/fig2", exp, res_files[1]))
+data_files <- dir(file.path(data_directory, "data", exp))
+contents <- load(file.path(data_directory, "data", exp, data_files[1]))
 fit <- as.matrix(all$fit)
 tr <- everything$data$tr
 dist_phylo <- ape::cophenetic.phylo(tr)
