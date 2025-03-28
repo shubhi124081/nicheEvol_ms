@@ -1,65 +1,146 @@
-# nicheEvol_ms
-Code from a manuscript titled "Measuring the evolution of n-dimensional environmental niches", published in Ecography -  DOI: 10.5281/zenodo.13976337
+# Measuring the Evolution of n-Dimensional Environmental Niches
 
-# Introduction 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15090785.svg)](https://doi.org/10.5281/zenodo.15090785)
+[![Published in Ecography](https://img.shields.io/badge/Published%20In-Ecography-4b8bbe)](https://doi.org/10.1111/ecog.07285)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub Repo stars](https://img.shields.io/github/stars/shubhi124081/nicheEvol_ms?style=social)](https://github.com/shubhi124081/nicheEvol_ms/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/shubhi124081/nicheEvol_ms?style=social)](https://github.com/shubhi124081/nicheEvol_ms/network/members)
+[![GitHub issues](https://img.shields.io/github/issues/shubhi124081/nicheEvol_ms)](https://github.com/shubhi124081/nicheEvol_ms/issues)
+[![Last Commit](https://img.shields.io/github/last-commit/shubhi124081/nicheEvol_ms)](https://github.com/shubhi124081/nicheEvol_ms/commits/main)
 
-In our manuscript, we present a novel species’ distribution modeling framework that connects spatial and phylogenetic data to jointly estimate species’ niches and the underlying niche evolution model. 
-The environmental niches of species, i.e. the set of abiotic conditions in which they can sustain a population, underpin the distribution of species in space and time. Understanding how such environmental niches evolve is therefore crucial for addressing some of the biggest challenges in ecology and evolutionary biology; which species are most at risk due to changing abiotic conditions? Will species be able to persist in the face of changing conditions? How will species respond to climate change? 
+_This repository accompanies the manuscript:_  
+**"Measuring the evolution of n-dimensional environmental niches"**  
+Published in **Ecography (2024)**  
+[DOI: 10.1111/ecog.07285](https://doi.org/10.1111/ecog.07285)
 
-We introduce a joint framework that simultaneously estimates species’ *n*-dimensional environmental niches together with the underlying evolutionary process. The framework follows a Bayesian hierarchical structure where the relationship between species and environment is estimated while accounting for errors and biases in the raw occurrence datasets. Species’ responses to environmental variables are fitted jointly for the whole clade of species as a latent Gaussian process in which the relationship between niche similarity and phylogenetic distance is estimated. The advantage of this joint framework is two-fold: i. the evolutionary process (distance decay of niche similarity in phylogenetic space) is estimated jointly with the actual niches propagating uncertainty from occurrence data to model parameter estimates; ii. the approach integrates species distribution modeling with phylogenetics effectively connecting robust niche estimation from noisy occurrence data to measuring the rate and mode of niche evolution through traditional evolutionary models such as Ornstein-Uhlenbeck and Brownian Motion that. We derive mathematically how species distribution modeling can be connected to OU and BM models. Further, we show how the estimated parameters of the presented joint framework can enable specific hypothesis tests regarding niche evolution. Through a series of simulations, we emphasize how niche estimates can be improved across a species clade with our framework.
+---
 
-# Framework overview 
+## 📄 Citation
 
-We provide all the scripts and functions required to replicate our analyses in the manuscript. Below is a description of the directory structure 
+If you use this code or build upon this work, please cite:
 
-- nicheEvol_ms 
-    - data
-        - trees
-    - raw_data
-        - trees
-    - res 
-    - scripts 
-        - 00-functions.R
-        - 01-gen_tree.R 
-        - 02-gen_data.R 
-        - 03-stan_model.R 
-        - 04-run_file.R
-        - Appendix_2.Rmd
-        - niche_space.R 
-        - params_fig.R 
-        - posterior_analysis.R 
-- .lintr
-- .gitignore 
-- README.md
+```bibtex
+@article{sharma2024nicheevol,
+  title = {Measuring the evolution of n-dimensional environmental niches},
+  author = {Sharma, Shubhi, Winner, Kevin, Mäkinen, Jussi and Jetz, Walter},
+  journal = {Ecography},
+  year = {2024},
+  doi = {10.1111/ecog.07285}
+}
+```
 
-**Note**: there is no data stored in this repository. To access the data visit (https://zenodo.org/records/11497929)
+---
 
-The data for simulations is stored in `data` directory with all simulated trees stored in the `data/trees` sub-directory 
+## Data Availability
 
-The data for real-world analysis will need to be stored in `raw_data` directory with trees stored in the `raw_data/trees` sub-directory
+All data and results have been archived and are available via Zenodo:
 
-All results will be written to and read from `res` directory
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15090785.svg)](https://doi.org/10.5281/zenodo.15090785)
 
-The `scripts` directory stores all functions and scripts to fit the models and do the analysis. Below is a description of all the contents of the `scripts` directory. Overall, the numbered files run the model fitting and analysis. The non-numbered files are used for generating figures and appendicies. 
+---
 
-`00-functions.R` has all of the functions that need to be read in to support model fitting, analysis and plotting 
+## Summary
 
-`01-gen_tree.R` is a script for generating a phylogeny for use in simulations. **Note**: If replicating analysis in the manuscript, skip this script. The simulated phylogeny is uploaded to the Zenodo repository
+This manuscript presents a novel species distribution modeling framework that connects spatial and phylogenetic data to jointly estimate both environmental niches and their underlying evolutionary processes.
 
-`02-gen_data.R` script for generating simulated data. For a brief overview of this script take a look at `Appendix_2.Rmd` which is a vigenette going through the simulation framework 
+- The model is a **Bayesian hierarchical framework** that integrates species distribution modeling with phylogenetics.
+- Environmental niches are estimated across species using a **latent Gaussian process**, linking **niche similarity to phylogenetic distance**.
+- We connect the estimated model parameters to classical **evolutionary models** such as **Ornstein–Uhlenbeck** and **Brownian Motion**, enabling specific hypothesis testing about niche evolution.
+- Simulations demonstrate that the framework improves niche estimation across a clade, even when data is sparse or noisy.
 
-`03-stan_model.R` script with stan model written down 
+---
 
-`04-run_file.R` reads in data and stan models and runs files. Writes out results to `res` directory. **Note**: All models were run on the High Performance Cluster with 8 CPUs. These models may be too heavy to run on a personal machine. Therefore, all the result files have also been made available in the Zenodo repository. 
+## Installation
 
-`Appendix_2.Rmd` vigenette going through simulation framework 
+This analysis is lightweight in terms of package dependencies, as most functions required are written in base R (see `scripts/00-functions.R`).
 
-`niche_space.R` Figure 4 part 1 
+You will need the following R packages:
+```r
+install.packages(c("rstan", "ape", "phytools", "terra", "MASS", "grDevices", "ggplot2"))
+```
 
-`params_fig.R` Figure 2
+We also recommend using [`renv`](https://rstudio.github.io/renv/) for reproducible environments. If available:
+```r
+renv::restore()
+```
 
-`posterior_analysis.R` Figure 3, Figure 4 part 2 
+---
 
-# Installation 
+## 📁 Repository Structure
 
-This analysis is pretty lightweight in terms of package dependecies as most functions required are written in base R (see `00-functions.R`). We do require installation of a few packages packages - `rstan`, `ape`, `phytools`, `terra`, `MASS`, `grDevices` and `ggplot2`
+```text
+nicheEvol_ms/
+├── data/                 # Simulated data for experiments
+│   └── trees/            # Simulated phylogenetic trees
+├── raw_data/             # (To be populated) Real-world occurrence data
+│   └── trees/            # (To be populated) Real phylogenetic trees
+├── res/                  # Output directory for results
+├── scripts/              # Core scripts for model and analysis
+│   ├── 00-functions.R         # Core functions for modeling and plotting
+│   ├── 01-gen_tree.R          # Simulated tree generation (skip if replicating paper)
+│   ├── 02-gen_data.R          # Simulated data generation
+│   ├── 03-stan_model.R        # Stan model specification
+│   ├── 04-run_file.R          # Model fitting and result saving
+│   ├── niche_space.R          # Script for generating Figure 4 (part 1)
+│   ├── params_fig.R           # Script for generating Figure 2
+│   ├── posterior_analysis.R   # Script for generating Figure 3 & Figure 4 (part 2)
+├── Appendix_2.Rmd        # Simulation framework vignette
+├── .lintr                # Linting configuration
+├── .gitignore
+└── README.md             # You're here!
+```
+
+---
+
+## Reproducing Results
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/shubhi124081/nicheEvol_ms.git
+cd nicheEvol_ms
+```
+
+### 2. Install R dependencies
+
+As noted above, either manually install required packages or use `renv`.
+
+### 3. Run simulations
+
+You can replicate the simulations and model fitting pipeline using:
+
+```r
+source("scripts/00-functions.R")
+source("scripts/02-gen_data.R")
+source("scripts/03-stan_model.R")
+source("scripts/04-run_file.R")
+```
+
+> ⚠️ Note: All models were originally run on a High Performance Cluster using 8 CPUs. Running the full pipeline on a personal machine may be computationally intensive. Precomputed results are available on [Zenodo](https://doi.org/10.5281/zenodo.15090785).
+
+---
+
+## Figures & Visualizations
+
+Each figure in the manuscript can be regenerated using the corresponding script:
+
+- **Figure 2:** `scripts/fig2-posterior_analysis.R`
+- **Figure 3:** `scripts/fig3-params_fig.R`
+- **Figure 4 (part 1):** `scripts/fig4a-niche_space.R`
+- **Figure 4 (part 2):** `scripts/fig4b-posterior_analysis.R`
+- **Simulation walkthrough:** `Appendix_2.Rmd`
+
+---
+
+## Contributing
+
+This project is not currently accepting outside contributions, but feel free to fork or open an issue if you have questions or suggestions.
+
+---
+
+## Contact
+
+For questions, feedback, or collaboration inquiries:  
+📧 [shubhi.sharma@yale.edu]  
+
+---
+
