@@ -1,3 +1,4 @@
+# Set-up ---
 library(ggplot2)
 
 root <- "your_file_path_here"
