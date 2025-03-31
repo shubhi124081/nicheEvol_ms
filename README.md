@@ -33,7 +33,7 @@ If you use this code or build upon this work, please cite:
 
 All data and results have been archived and are available via Zenodo:
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15090785.svg)](https://doi.org/10.5281/zenodo.15090785)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15090785.svg)](https://doi.org/10.5281/zenodo.15115983)
 
 ---
 
