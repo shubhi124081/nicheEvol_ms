@@ -110,6 +110,10 @@ source("scripts/04-run_file.R")
 
 > ⚠️ Note: All models were originally run on a High Performance Cluster using 8 CPUs. Running the full pipeline on a personal machine may be computationally intensive. Precomputed results are available on [Zenodo](https://doi.org/10.5281/zenodo.15090785).
 
+### 4. Note on convergence 
+
+These models were particularly sensitive to priors on the GP hyperparameters. Tight priors were used to aid identifiability, as detailed in the limitations. Despite this, convergence remained challenging, and small variations in implementation may impact reproducibility. 
+
 ---
 
 ## Figures & Visualizations
